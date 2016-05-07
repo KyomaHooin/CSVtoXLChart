@@ -7,8 +7,8 @@
 
 ;TUNE
 
-#AutoIt3Wrapper_Icon=toolbox.ico
 #NoTrayIcon
+#AutoIt3Wrapper_Icon=toolbox.ico
 
 ;INCLUDE
 
@@ -16,8 +16,9 @@
 #include <GUIConstantsEx.au3>
 #include <File.au3>
 #include <Excel.au3>
-#include <C:\Users\brunari\Desktop\CSVtoXLChart\ExcelChart 0.4.0.0\ExcelChart.au3>
-#include <C:\Users\brunari\Desktop\CSVtoXLChart\ExcelChart 0.4.0.0\ExcelChartConstants.au3>
+#include <ExcelChart.au3>
+;#include <C:\Users\brunari\Desktop\CSVtoXLChart\ExcelChart 0.4.0.0\ExcelChart.au3>
+;#include <C:\Users\brunari\Desktop\CSVtoXLChart\ExcelChart 0.4.0.0\ExcelChartConstants.au3>
 #include <WindowsConstants.au3>
 
 ;VAR
@@ -31,13 +32,13 @@ global $graph_pos[6] = ['D3:M25','E3:N25', 'F3:O25','G3:P25','H3:Q25','I3:R25'];
 
 ; GUI
 
-$gui = GUICreate("CSVtoXLChart 1.1", 337, 168, -1, -1)
-$csv_button = GUICtrlCreateButton("CSV", 248, 13, 75, 22)
-$graf_button = GUICtrlCreateButton("GRAF", 248, 70, 75, 22)
-$text_mistnosti = GUICtrlCreateLabel("MISTNOST", 16, 46, 60, 17)
-$text_error = GUICtrlCreateLabel('', 188, 141, 133, 17)
-$input = GUICtrlCreateInput('', 16, 13, 209, 21) ;
-$list_mistnosti = GUICtrlCreateList('', 16, 70, 153, 84, $LBS_SORT + $LBS_EXTENDEDSEL + $WS_VSCROLL)
+$gui = GUICreate("CSVtoXLChart 1.2", 219, 254, -1, -1)
+$csv_button = GUICtrlCreateButton("CSV", 136, 35, 73, 23)
+$graf_button = GUICtrlCreateButton("GRAF", 136, 222, 73, 23)
+$text_mistnosti = GUICtrlCreateLabel("MÍSTNOST", 12, 38, 60, 17)
+$text_error = GUICtrlCreateLabel('', 136, 75, 74, 140)
+$input = GUICtrlCreateInput('', 8, 8, 201, 21)
+$list_mistnosti = GUICtrlCreateList('', 8, 60, 117, 186, $LBS_SORT + $LBS_EXTENDEDSEL + $WS_VSCROLL)
 
 ;CONTROL
 
@@ -215,6 +216,6 @@ Func create_excel_graph()
 	If @error Then Exit MsgBox($MB_SYSTEMMODAL, 'Chyba', "Nepodařilo se vytvořit graf." & @CRLF & @CRLF & 'Chyba [' & @error & ']')
 	;patch the Y scale
 	_XLChart_AxisSet($graf.Axes($xlValue), 0, 100)
-	If @error Then MsgBox($MB_SYSTEMMODAL, 'Chyba',"Nepodařilo se nastavit osu." & @CRLF & @CRLF & 'Chyba [' & @error & ']' )
+	If @error Then Exit MsgBox($MB_SYSTEMMODAL, 'Chyba',"Nepodařilo se nastavit osu." & @CRLF & @CRLF & 'Chyba [' & @error & ']' )
 EndFunc
 
