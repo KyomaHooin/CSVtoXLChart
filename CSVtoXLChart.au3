@@ -16,19 +16,21 @@
 #include <GUIConstantsEx.au3>
 #include <File.au3>
 #include <Excel.au3>
-#include <ExcelChart.au3>
-;#include <C:\Users\brunari\Desktop\CSVtoXLChart\ExcelChart 0.4.0.0\ExcelChart.au3>
+;#include <ExcelChart.au3>
+#include <C:\Users\brunari\Desktop\CSVtoXLChart\ExcelChart 0.4.0.0\ExcelChart.au3>
 ;#include <C:\Users\brunari\Desktop\CSVtoXLChart\ExcelChart 0.4.0.0\ExcelChartConstants.au3>
 #include <WindowsConstants.au3>
 
 ;VAR
 
-global $csv_file = '' ;CSV soubor pro import
+global $csv_file = '' ;CSV file
 global $csv_array = '' ; CSV array
-global $vsechny_mistnosti = '' ;Pole vsech mistnosti
-global $vybrane_mistnosti = ''; vybrane pole mistnosti
+global $vsechny_mistnosti = '' ;full location list array
+global $vybrane_mistnosti = ''; selected location array
 global $column[6] = ['B2','C2','D2','E2','F2','G2'] ;Excel data columns
 global $graph_pos[6] = ['D3:M25','E3:N25', 'F3:O25','G3:P25','H3:Q25','I3:R25']; Excel Graph position
+global $prefix[4] = ['T','H', 'Teplota','Vlhkost'] ; prefix array
+global $format = 0; default prefix format index
 
 ; GUI
 
@@ -93,7 +95,7 @@ While 1
 			$vybrane_mistnosti = _GUICtrlListBox_GetSelItemsText($list_mistnosti)
 			;define global data  array by slect size
 			global $vsechna_data[UBound($vybrane_mistnosti)]
-			;get dte array
+			;get date array
 			$vsechna_data[0] = parse_date()
 			;get the rest of the data arrays
 			for $i=1 to ubound($vybrane_mistnosti) - 1
@@ -124,7 +126,13 @@ Func parse_location()
 		;find all location by temperature capital
 		If StringLeft($vsechny_mistnosti[$i], 1) == 'T' Then
 			;remove prefix and populate list
-			GUICtrlSetData($list_mistnosti, StringTrimLeft($vsechny_mistnosti[$i], 2))
+			if StringLeft($vsechny_mistnosti[$i],7) == 'Teplota' then
+				GUICtrlSetData($list_mistnosti, StringTrimLeft($vsechny_mistnosti[$i], 8))
+				$format = 2
+			else
+				GUICtrlSetData($list_mistnosti, StringTrimLeft($vsechny_mistnosti[$i], 2))
+				$format = 0
+			EndIf
 		EndIf
 	Next
 	FileClose($f)
@@ -135,7 +143,8 @@ Func parse_date()
 	local $d_data = ''
 	;_ArrayDisplay($csv_array)
 	For $i = 6 To UBound($csv_array, $UBOUND_ROWS) - 1
-		$d_data &= StringRegExpReplace(($csv_array[$i])[0], '([0-9]+.)([0-9]+.).*','$1$2') & ';'
+		;full date
+		$d_data &= ($csv_array[$i])[0] & ';'
 	Next
 	$d_data = StringSplit($d_data, ';', $STR_NOCOUNT)
 	_ArrayPush($d_data, 'datum', 1)
@@ -146,11 +155,11 @@ EndFunc
 Func parse_data($selection)
 	local $teplota = '', $vlhkost = '';
 	;get back real CSV string value from selected room
-	$teplota = 'T ' & $selection
+	$teplota = $prefix[$format] & ' ' & $selection
 	if StringIsUpper(StringMid($selection,1,1))  then
-		$vlhkost = 'H ' & StringLeft($selection, 1) & '2' & StringTrimLeft($selection, 1) ;StringRegExpReplace($selection,"([A-Z]).*","\1[2]")
+		$vlhkost = $prefix[$format+1] & ' ' & StringLeft($selection, 1) & '2' & StringTrimLeft($selection, 1) ;StringRegExpReplace($selection,"([A-Z]).*","\1[2]")
 	else
-		$vlhkost = 'H ' & $selection
+		$vlhkost = $prefix[$format+1] & ' ' & $selection
 	EndIf
 	;get column indexes, start at second value
 	$t_col_index = _ArraySearch($vsechny_mistnosti, $teplota, 2)
