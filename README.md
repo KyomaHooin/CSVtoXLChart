@@ -1,7 +1,7 @@
 
 DESCRIPTION
 
-Parse "Sauter NovaPro 474c Cz" temperature/humidity sensor CSV data export into MS Excel
+Parse "Sauter NovaPro 374c Cz" temperature/humidity sensor CSV data export into MS Excel
 and create simple line graph.
 
 FILE
