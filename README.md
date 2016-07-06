@@ -1,3 +1,4 @@
+![CSV to XLChart](https://github.com/KyomaHooin/CSVtoXLChart/raw/master/csvchart_screenshot.png "screenshot")
 
 DESCRIPTION
 
