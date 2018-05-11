@@ -14,7 +14,7 @@ ExcelChartConstants.au3 - Excel Chart library constants by "water", "GreenCan".
             toolbox.ico - Program icon.
 </pre>
 
-CONTACT
+SOURCE
 
-Source: https://github.com/KyomaHooin/CSVtoXLChart
+https://github.com/KyomaHooin/CSVtoXLChart
 
